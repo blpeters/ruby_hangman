@@ -1,58 +1,103 @@
 # frozen_string_literal: true
 
+require_relative "display"
+
 # Game logic for Hangman word game
 class Hangman
 
-  attr_accessor :guesses_left
+  include Display
+
+  attr_accessor :guesses_left, :guess
 
   def initialize
-    @answer = random_word
+    @answer = random_word.split('')
+    p answer
     @word_clues = new_word_board(answer)
     @correct_letters = []
     @wrong_letters = []
+    @guess = ''
     @guesses_left = 10
     play_game
   end
 
   def play_game
-    puts "These will be the instructions"
-    #prompt for letter - will need the answer, the word display, arrays for correctly and incorrectly guessed letters
-    until game_over
-      guess = validate_guess(get_guess)
+    display_instructions
+    display_clues(word_clues)
+    until game_over?
+      get_guess
       check_guess(guess)
-      p guesses_left
+      give_feedback
     end
   end
 
   def get_guess
-    print "this will display the guess prompt. enter letter: "
-    gets.chomp
+    prompt_for_letter
+    @guess = gets.chomp
+    get_guess until validate_guess(@guess)
   end
 
   def validate_guess(guess)
-    # TODO - Validate that a single alpha character entered that hasnt been guessed yet.
-    guess
-  end
-
-  def check_guess(guess)
-    answer_arr = answer.split('')
-    if answer_arr.include?(guess)
-      answer_arr.each_with_index { |char, index| 
-        if char == guess
-          word_clues[index] = " #{char} "
-        end
-      }
-    else 
-      wrong_answers << guess
+    if letter_used?(guess)
+      display_letter_used
+      false
+    elsif !is_letter?(guess)
+      display_invalid_input
+      false
+    else
+      true
     end
   end
 
-  def word_solved?
-    false
+  def letter_used?(guess)
+    if correct_letters.include?(guess) || wrong_letters.include?(guess)
+      true
+    else false
+    end
+  end
+ 
+  def is_letter?(guess)
+    p guess
+    guess.match?(/[a-zA-Z]/) && guess.length == 1
   end
 
-  def game_over
-    if guesses_left == 0 or word_solved?
+  def check_guess(guess)
+    if answer.include?(guess)
+      add_letter(guess)
+    else 
+      wrong_letters.push(guess).sort!
+      @guesses_left = @guesses_left - 1
+    end
+  end
+
+  def solved?
+    answer == word_clues
+  end
+
+  def add_letter(guess)
+    answer.each_with_index { |char, index| 
+      if char == guess
+        word_clues[index] = "#{char}"
+      end
+    }
+    correct_letters.push(guess).sort!
+  end
+
+  def give_feedback
+    puts "\n\n"
+    puts "Wrong Letters guessed: #{wrong_letters}"
+    puts "Correct Letters guessed: #{correct_letters}"
+    puts "INCORRECT GUESSES REMAINING: #{guesses_left}"
+    display_clues(word_clues)
+  end
+
+  def game_over?
+    if guesses_left == 0
+      display_lose_game
+      puts answer.join('').upcase
+      true
+    elsif solved?
+      display_win_game
+      puts answer.join('').upcase
       true
     else false
     end
@@ -63,31 +108,18 @@ class Hangman
   attr_reader :answer
   attr_accessor :correct_letters, :wrong_letters, :word_clues
 
- # Select a random 5 to 12 letter word from word bank.
+ # Selects a random 5 to 12 letter word from word bank.
   def random_word 
     word_bank_raw = File.open("google-10000-english-no-swears.txt").readlines.each(&:chomp!)
     word_bank =  word_bank_raw.select {|element| element.length >= 5 && element.length <= 12}
-    @answer = word_bank[rand(word_bank.length)]
-    p @answer
+    word_bank[rand(word_bank.length)]
   end
 
   def new_word_board(word)
-    Array.new(word.length, ' _ ').join('')
+    board = Array.new(word.length, '_')
+    p board
   end
 end
 
 Hangman.new
 
-# Create a secret word display with same number of blanks as the answer
-
-# Prompt the user to guess a single letter, while displaying how many guesses they have left.
-
-# Check letter against answer (with index) and add that letter at the same index to the word display array if matches
-
-# Add valid guess to a letters guessed array
-
-# Display new secret word display with letters added, updated guesses left, and letters already guessed.
-
-# For subsequent guesses, check letter guess against letters_guessed array and reprompt if letter already used
-
-# Game over if guesses == 0 or the word display no longer contains any blanks.
