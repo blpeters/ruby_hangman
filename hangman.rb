@@ -31,7 +31,7 @@ class Hangman
 
   def get_guess
     prompt_for_letter
-    @guess = gets.chomp
+    @guess = gets.chomp.upcase
     get_guess until validate_guess(@guess)
   end
 
@@ -110,7 +110,7 @@ class Hangman
   def random_word 
     word_bank_raw = File.open("google-10000-english-no-swears.txt").readlines.each(&:chomp!)
     word_bank =  word_bank_raw.select {|element| element.length >= 5 && element.length <= 12}
-    word_bank[rand(word_bank.length)]
+    word_bank[rand(word_bank.length)].upcase
   end
 
   def new_word_board(word)
