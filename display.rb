@@ -2,14 +2,18 @@
 
 module Display
   def display_instructions
+    puts ''
+    puts '~~~~~~~~~~~~~~~~~~~~'
     puts "Welcome to Hangman!"
+    puts '~~~~~~~~~~~~~~~~~~~~'
+    puts ''
     puts "You will have 10 incorrect guesses to solve the secret word"
     puts "Let's Play!\n"
   end
 
   def display_clues(clues)
     puts " "
-    puts clues.join(' ')
+    puts "SECRET WORD: #{clues.join(' ')}"
     puts " "
   end
 

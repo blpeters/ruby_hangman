@@ -11,7 +11,6 @@ class Hangman
 
   def initialize
     @answer = random_word.split('')
-    p answer
     @word_clues = new_word_board(answer)
     @correct_letters = []
     @wrong_letters = []
@@ -56,7 +55,6 @@ class Hangman
   end
  
   def is_letter?(guess)
-    p guess
     guess.match?(/[a-zA-Z]/) && guess.length == 1
   end
 
@@ -117,9 +115,6 @@ class Hangman
 
   def new_word_board(word)
     board = Array.new(word.length, '_')
-    p board
   end
 end
-
-Hangman.new
 
