@@ -12,13 +12,11 @@ module Display
   end
 
   def prompt_for_load
-    print "Please enter 1 for new game or 2 to load an existing game: "
+    print "\nPlease enter 1 for new game or 2 to load an existing game: "
     gets.chomp
   end
 
   def display_clues(clues)
-    p clues
-    p clues.class
     puts " "
     puts "SECRET WORD: #{clues.join(' ')}"
     puts " "
@@ -51,6 +49,25 @@ module Display
 
   def display_win_game
     puts "You solved the word! YOU WIN!\n\n"
-    puts "The word was...\n\n"
+    print "The word was... "
+  end
+
+  def play_again_prompt
+    puts "\nWould you like to play again? (y/n): "
+    validate_choice(choice = gets.chomp.upcase)
+    case choice
+    when "Y" || "YES"
+      new_game
+    when "N" || "NO"
+      puts "\nThanks for playing!"
+      exit
+    end
+  end
+
+  def validate_choice(choice)
+    until ['Y', 'YES', 'N', 'NO'].include?(choice)
+      puts "\nInvalid choice. Select YES (Y) or NO (N): "
+      choice = gets.chomp.upcase
+    end
   end
 end

@@ -39,6 +39,7 @@ class Hangman
       check_guess(guess)
       give_feedback
     end
+    play_again_prompt
   end
 
   def get_guess
@@ -49,7 +50,6 @@ class Hangman
 
   def validate_guess(guess)
     if guess == 'SAVE' || guess == 'EXIT'
-      puts "save or exit text #{guess}"
       save_or_exit
     elsif letter_used?(guess)
       display_letter_used

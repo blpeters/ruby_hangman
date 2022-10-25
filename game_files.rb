@@ -7,27 +7,34 @@ module GameFiles
     when 'SAVE'
       save_game
     when 'EXIT'
-      puts 'Exiting Game - Thanks for playing'
+      puts "\nExiting Game - Thanks for playing\n\n"
       exit
     end
   end
 
   def save_game
-    print 'Please enter a file name for your game: '
+    print "\nPlease enter a file name for your game: "
     filename = gets.chomp
     File.open("./output/#{filename}.yml", 'w') {|file| YAML.dump([] << self, file)}
-    puts "File saved as #{filename}.yaml"
+    puts "\nFile saved as #{filename}.yml \n\n"
+    "Exiting Program..."
     exit
   end
 
   def load_game
-    # Show files in output directory
-    deserialize("brett.yaml")
+    saved_games = Dir.children('output')
+    saved_games.each_with_index {|file, index| puts "\n#{index + 1} - #{file}"}
+    puts "\nPlease select from the saved files above by entering the corresponding number: "
+    selection = gets.chomp
+    until selection.match?(/\d/) && saved_games.at(selection.to_i - 1) != nil
+      puts "\nInvalid Input. Select a file number from the above list: "
+      selection = gets.chomp
+    end
+    deserialize(saved_games[selection.to_i - 1])
   end
 
-  def deserialize(file_name)
-    yaml = YAML.load_file("./output/brett.yml", permitted_classes: [Hangman])
-    p yaml
+  def deserialize(filename)
+    yaml = YAML.load_file("./output/#{filename}", permitted_classes: [Hangman])
     self.answer = yaml[0].answer
     self.word_clues = yaml[0].word_clues
     self.correct_letters = yaml[0].correct_letters
