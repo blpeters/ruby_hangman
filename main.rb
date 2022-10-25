@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "display"
-require_relative "game_files"
+require_relative 'display'
+require_relative 'game_files'
 require 'yaml'
 
 # Game logic for Hangman word game
 class Hangman
-
   include Display
   include GameFiles
 
@@ -16,7 +15,7 @@ class Hangman
     @guess = ''
     game_mode = prompt_for_load 
     until ['1','2'].include?(game_mode)
-      puts "Invalid choice"
+      display_invalid_input
       game_mode = prompt_for_load 
     end
     game_mode == '1' ? new_game : load_game
@@ -33,8 +32,8 @@ class Hangman
   end
 
   def play_game
-    display_clues(word_clues)
     until game_over?
+      display_clues(word_clues)
       get_guess
       check_guess(guess)
       give_feedback

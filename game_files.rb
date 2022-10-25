@@ -40,6 +40,7 @@ module GameFiles
     self.correct_letters = yaml[0].correct_letters
     self.wrong_letters = yaml[0].wrong_letters
     self.guesses_left = yaml[0].guesses_left
+    give_feedback
     play_game
   end
 end

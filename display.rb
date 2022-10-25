@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
+# Methods for command line display for Hangman game.
 module Display
   def display_instructions
     puts ''
     puts '~~~~~~~~~~~~~~~~~~~~'
-    puts "Welcome to Hangman!"
+    puts 'Welcome to Hangman!'
     puts '~~~~~~~~~~~~~~~~~~~~'
     puts ''
-    puts "You will have 10 incorrect guesses to solve the secret word"
+    puts 'You will have 10 incorrect guesses to solve the secret word'
     puts "Let's Play!\n"
   end
 
@@ -17,9 +18,9 @@ module Display
   end
 
   def display_clues(clues)
-    puts " "
+    puts ' '
     puts "SECRET WORD: #{clues.join(' ')}"
-    puts " "
+    puts ' '
   end
 
   def give_feedback
@@ -27,46 +28,50 @@ module Display
     puts "Wrong Letters guessed: #{wrong_letters}"
     puts "Correct Letters guessed: #{correct_letters}"
     puts "INCORRECT GUESSES REMAINING: #{guesses_left}"
-    display_clues(word_clues)
   end
 
   def prompt_for_letter
     print "Please guess a letter, enter 'save' to save game, or 'exit' to quit: "
   end
-  
+
   def display_letter_used
-    print "This letter has already been guessed - Please select a different letter: "
+    print 'This letter has already been guessed - Please select a different letter: '
   end
 
   def display_invalid_input
-    print "This is not a valid input. "
+    print 'This is not a valid input. '
   end
 
   def display_lose_game
     puts "You ran out of turns - GAME OVER.\n\n"
-    puts "The word was...\n\n"
+    word_reveal
   end
 
   def display_win_game
     puts "You solved the word! YOU WIN!\n\n"
-    print "The word was... "
+    word_reveal
+  end
+
+  def word_reveal
+    print 'The word was... '
   end
 
   def play_again_prompt
     puts "\nWould you like to play again? (y/n): "
     validate_choice(choice = gets.chomp.upcase)
     case choice
-    when "Y" || "YES"
+    when 'Y' || 'YES'
       new_game
-    when "N" || "NO"
+    when 'N' || 'NO'
       puts "\nThanks for playing!"
       exit
     end
   end
 
   def validate_choice(choice)
-    until ['Y', 'YES', 'N', 'NO'].include?(choice)
-      puts "\nInvalid choice. Select YES (Y) or NO (N): "
+    until %w[Y YES N NO].include?(choice)
+      display_invalid_input
+      puts 'Select YES (Y) or NO (N): '
       choice = gets.chomp.upcase
     end
   end
