@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require_relative "display"
+require_relative "files"
 
 # Game logic for Hangman word game
 class Hangman
 
   include Display
+  include Files
 
   attr_accessor :guesses_left, :guess
 
@@ -53,7 +55,7 @@ class Hangman
     else false
     end
   end
- 
+
   def is_letter?(guess)
     guess.match?(/[a-zA-Z]/) && guess.length == 1
   end
@@ -89,6 +91,7 @@ class Hangman
   end
 
   def game_over?
+    false
     if guesses_left == 0
       display_lose_game
       puts answer.join('').upcase
@@ -97,7 +100,6 @@ class Hangman
       display_win_game
       puts answer.join('').upcase
       true
-    else false
     end
   end
 
@@ -117,4 +119,3 @@ class Hangman
     board = Array.new(word.length, '_')
   end
 end
-
