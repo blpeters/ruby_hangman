@@ -13,10 +13,10 @@ class Hangman
 
   def initialize
     @guess = ''
-    game_mode = prompt_for_load 
-    until ['1','2'].include?(game_mode)
+    game_mode = prompt_for_load
+    until %w[1 2].include?(game_mode)
       display_invalid_input
-      game_mode = prompt_for_load 
+      game_mode = prompt_for_load
     end
     game_mode == '1' ? new_game : load_game
   end
@@ -34,7 +34,7 @@ class Hangman
   def play_game
     until game_over?
       display_clues(word_clues)
-      get_guess
+      receive_guess
       check_guess(guess)
       give_feedback
     end
@@ -43,14 +43,14 @@ class Hangman
 
   private
 
-  def get_guess
+  def receive_guess
     prompt_for_letter
     @guess = gets.chomp.upcase
-    get_guess until validate_guess(@guess)
+    receive_guess until validate_guess(@guess)
   end
-  
+
   def validate_guess(guess)
-    if guess == 'SAVE' || guess == 'EXIT'
+    if %w[SAVE EXIT].include?(guess)
       save_or_exit
     elsif letter_used?(guess)
       display_letter_used
@@ -65,7 +65,8 @@ class Hangman
   def letter_used?(guess)
     if correct_letters.include?(guess) || wrong_letters.include?(guess)
       true
-    else false
+    else
+      false
     end
   end
 
@@ -78,7 +79,7 @@ class Hangman
       add_letter(guess)
     else 
       wrong_letters.push(guess).sort!
-      @guesses_left = @guesses_left - 1
+      @guesses_left -= 1
     end
   end
 
@@ -87,17 +88,13 @@ class Hangman
   end
 
   def add_letter(guess)
-    answer.each_with_index { |char, index| 
-      if char == guess
-        word_clues[index] = "#{char}"
-      end
-    }
+    answer.each_with_index { |char, index| word_clues[index] = char.to_s if char == guess }
     correct_letters.push(guess).sort!
   end
 
   def game_over?
     false
-    if guesses_left == 0
+    if guesses_left.zero?
       display_lose_game
       puts answer.join('').upcase
       true
@@ -108,17 +105,15 @@ class Hangman
     end
   end
 
-
- # Selects a random 5 to 12 letter word from word bank.
-  def random_word 
-    word_bank_raw = File.open("google-10000-english-no-swears.txt").readlines.each(&:chomp!)
-    word_bank =  word_bank_raw.select {|element| element.length >= 5 && element.length <= 12}
+  def random_word
+    word_bank_raw = File.open('google-10000-english-no-swears.txt').readlines.each(&:chomp!)
+    word_bank = word_bank_raw.select { |element| element.length >= 5 && element.length <= 12 }
     word_bank[rand(word_bank.length)].upcase
   end
 
   def new_word_board(word)
-    board = Array.new(word.length, '_')
+    Array.new(word.length, '_')
   end
 end
 
-game = Hangman.new
+Hangman.new
