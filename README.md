@@ -2,7 +2,7 @@
 
 This is my version of the classic 2-player word game, Hangman, using only a command line interface. Built using Ruby.
 
-[Live Demo]('https://replit.com/@blpeters/rubyhangman#main.rb')
+## [Live Demo](https://replit.com/@blpeters/rubyhangman#main.rb)
 
 ### Skills 
 
