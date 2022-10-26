@@ -41,12 +41,14 @@ class Hangman
     play_again_prompt
   end
 
+  private
+
   def get_guess
     prompt_for_letter
     @guess = gets.chomp.upcase
     get_guess until validate_guess(@guess)
   end
-
+  
   def validate_guess(guess)
     if guess == 'SAVE' || guess == 'EXIT'
       save_or_exit
@@ -106,7 +108,6 @@ class Hangman
     end
   end
 
-  private
 
  # Selects a random 5 to 12 letter word from word bank.
   def random_word 
