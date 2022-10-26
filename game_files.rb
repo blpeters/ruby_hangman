@@ -15,9 +15,9 @@ module GameFiles
   def save_game
     print "\nPlease enter a file name for your game: "
     filename = gets.chomp
-    File.open("./output/#{filename}.yml", 'w') {|file| YAML.dump([] << self, file)}
+    File.open("./output/#{filename}.yml", 'w') { |file| YAML.dump([] << self, file) }
     puts "\nFile saved as #{filename}.yml \n\n"
-    "Exiting Program..."
+    'Exiting Program...'
     exit
   end
 
