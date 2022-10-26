@@ -1,0 +1,26 @@
+---
+- !ruby/object:Hangman
+  guess: SAVE
+  answer:
+  - D
+  - I
+  - A
+  - B
+  - E
+  - T
+  - E
+  - S
+  word_clues:
+  - _
+  - _
+  - A
+  - _
+  - E
+  - _
+  - E
+  - _
+  correct_letters:
+  - A
+  - E
+  wrong_letters: []
+  guesses_left: 10
