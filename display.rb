@@ -64,6 +64,7 @@ module Display
       new_game
     when 'N' || 'NO'
       puts "\nThanks for playing!"
+      sleep(1)
       exit
     end
   end
